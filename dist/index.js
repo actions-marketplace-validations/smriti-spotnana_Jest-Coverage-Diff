@@ -2082,12 +2082,14 @@ function run() {
             // diff only - true
             // true => two reports - for diff?
             // two if deletion or addition bcoz keys diff
-            const coverageDetails = diffChecker.getCoverageDetails(true, `/`);
+            // true => get (inc or dec)?
+            const coverageDetails = diffChecker.getCoverageDetails(false, `/`);
             if (coverageDetails.length === 0) {
                 messageToPost =
                     'No changes to code coverage between the base branch and the head branch';
             }
             else {
+                // if you decrease no. of columns, ----! remove this too
                 messageToPost +=
                     'File | % Stmts | % Branch | % Funcs | % Lines \n -----|---------|----------|---------|------ \n';
                 messageToPost += coverageDetails.join('\n');
