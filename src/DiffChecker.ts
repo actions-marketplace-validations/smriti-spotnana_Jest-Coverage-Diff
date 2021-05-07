@@ -61,7 +61,7 @@ export class DiffChecker {
     console.debug(keys, 'keys ...')
     const returnStrings: string[] = []
     for (const key of keys) {
-      if (true) {
+      if (false) {
         returnStrings.push(
           this.createDiffLine(
             key.replace(currentDirectory, ''),
@@ -69,16 +69,16 @@ export class DiffChecker {
           )
         )
       } else {
-        if (!diffOnly) {
-          returnStrings.push(
-            `${key.replace(currentDirectory, '')} | ${
-              this.diffCoverageReport[key].statements.newPct
-            } | ${this.diffCoverageReport[key].branches.newPct} | ${
-              this.diffCoverageReport[key].functions.newPct
-            } | ${this.diffCoverageReport[key].lines.newPct}`
-          )
-        }
+        // if (!diffOnly) {
+        returnStrings.push(
+          ` ${key.replace(currentDirectory, '')} | ${
+            this.diffCoverageReport[key].statements.newPct
+          } | ${this.diffCoverageReport[key].branches.newPct} | ${
+            this.diffCoverageReport[key].functions.newPct
+          } | ${this.diffCoverageReport[key].lines.newPct}`
+        )
       }
+      // }
     }
     return returnStrings
   }

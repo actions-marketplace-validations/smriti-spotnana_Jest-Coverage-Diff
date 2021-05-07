@@ -2059,58 +2059,58 @@ function run() {
             // let reports: string[] = core.getInput("reports-array")
             // reports = ["jest.common.json", "jest.web.json", "jest.pixel.json"]
             // console.debug(reports, "reports ...")
-            for (let i in [lcovFiles[1]]) {
-                const lcovFile = lcovFiles[i];
-                const baseFile = baseFiles[i];
-                console.debug(lcovFile, 'lcovFile ...only testing web');
-                console.debug(baseFile, 'baseFile ...');
-                const file1 = path_1.join(CWD, lcovFile);
-                const file0 = path_1.join(CWD, baseFile);
-                console.log(file0, 'file0');
-                const codeCoverageNew = (JSON.parse(fs_1.default.readFileSync(file1).toString()));
-                // execSync('/usr/bin/git fetch')
-                // execSync('/usr/bin/git stash')
-                // execSync(`/usr/bin/git checkout --progress --force ${branchNameBase}`)
-                // execSync(commandToRun)
-                const codeCoverageOld = (JSON.parse(fs_1.default.readFileSync(file0).toString()));
-                const currentDirectory = child_process_1.execSync('pwd')
-                    .toString()
-                    .trim();
-                console.debug(currentDirectory, 'current dir ....');
-                const diffChecker = new DiffChecker_1.DiffChecker(codeCoverageNew, codeCoverageOld);
-                let messageToPost = `## Test coverage results :test_tube: \n\n`;
-                // diff only - true
-                // true => two reports - for diff?
-                // two if deletion or addition bcoz keys diff
-                const coverageDetails = diffChecker.getCoverageDetails(true, `/`);
-                if (coverageDetails.length === 0) {
-                    messageToPost =
-                        'No changes to code coverage between the base branch and the head branch';
-                }
-                else {
-                    messageToPost +=
-                        'File | % Stmts | % Branch | % Funcs | % Lines \n -----|-----|---------|----------|---------|------ \n';
-                    messageToPost += coverageDetails.join('\n');
-                }
-                yield githubClient.issues.createComment({
-                    repo: repoName,
-                    owner: repoOwner,
-                    body: messageToPost,
-                    issue_number: prNumber
-                });
-                // diffChecker.checkIfTestCoverageFallsBelowDelta(delta)
-                // check if the test coverage is falling below delta/tolerance.
-                // if () {
-                // messageToPost = `Current PR reduces the test coverage percentage for some tests`
-                // await githubClient.issues.createComment({
-                //   repo: repoName,
-                //   owner: repoOwner,
-                //   body: messageToPost,
-                //   issue_number: prNumber
-                // })
-                // throw Error(messageToPost)
-                // }
+            // for (let i in lcovFiles) {
+            const lcovFile = lcovFiles[1];
+            const baseFile = baseFiles[1];
+            console.debug(lcovFile, 'lcovFile ...only testing web');
+            console.debug(baseFile, 'baseFile ...');
+            const file1 = path_1.join(CWD, lcovFile);
+            const file0 = path_1.join(CWD, baseFile);
+            console.log(file0, 'file0');
+            const codeCoverageNew = (JSON.parse(fs_1.default.readFileSync(file1).toString()));
+            // execSync('/usr/bin/git fetch')
+            // execSync('/usr/bin/git stash')
+            // execSync(`/usr/bin/git checkout --progress --force ${branchNameBase}`)
+            // execSync(commandToRun)
+            const codeCoverageOld = (JSON.parse(fs_1.default.readFileSync(file0).toString()));
+            const currentDirectory = child_process_1.execSync('pwd')
+                .toString()
+                .trim();
+            console.debug(currentDirectory, 'current dir ....');
+            const diffChecker = new DiffChecker_1.DiffChecker(codeCoverageNew, codeCoverageOld);
+            let messageToPost = `## Test coverage results :test_tube: \n\n`;
+            // diff only - true
+            // true => two reports - for diff?
+            // two if deletion or addition bcoz keys diff
+            const coverageDetails = diffChecker.getCoverageDetails(true, `/`);
+            if (coverageDetails.length === 0) {
+                messageToPost =
+                    'No changes to code coverage between the base branch and the head branch';
             }
+            else {
+                messageToPost +=
+                    'File | % Stmts | % Branch | % Funcs | % Lines \n -----|-----|---------|----------|---------|------ \n';
+                messageToPost += coverageDetails.join('\n');
+            }
+            yield githubClient.issues.createComment({
+                repo: repoName,
+                owner: repoOwner,
+                body: messageToPost,
+                issue_number: prNumber
+            });
+            // diffChecker.checkIfTestCoverageFallsBelowDelta(delta)
+            // check if the test coverage is falling below delta/tolerance.
+            // if () {
+            // messageToPost = `Current PR reduces the test coverage percentage for some tests`
+            // await githubClient.issues.createComment({
+            //   repo: repoName,
+            //   owner: repoOwner,
+            //   body: messageToPost,
+            //   issue_number: prNumber
+            // })
+            // throw Error(messageToPost)
+            // }
+            // }
         }
         catch (error) {
             core.setFailed(error);
@@ -6763,10 +6763,12 @@ class DiffChecker {
         console.debug(keys, 'keys ...');
         const returnStrings = [];
         for (const key of keys) {
-            if (true) {
-                returnStrings.push(this.createDiffLine(key.replace(currentDirectory, ''), this.diffCoverageReport[key]));
+            if (false) {}
+            else {
+                // if (!diffOnly) {
+                returnStrings.push(` ${key.replace(currentDirectory, '')} | ${this.diffCoverageReport[key].statements.newPct} | ${this.diffCoverageReport[key].branches.newPct} | ${this.diffCoverageReport[key].functions.newPct} | ${this.diffCoverageReport[key].lines.newPct}`);
             }
-            else {}
+            // }
         }
         return returnStrings;
     }
