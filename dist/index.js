@@ -2016,57 +2016,88 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const path_1 = __webpack_require__(622);
 const core = __importStar(__webpack_require__(470));
 const github = __importStar(__webpack_require__(469));
 const child_process_1 = __webpack_require__(129);
 const fs_1 = __importDefault(__webpack_require__(747));
 const DiffChecker_1 = __webpack_require__(563);
 function run() {
-    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const repoName = github.context.repo.repo;
             const repoOwner = github.context.repo.owner;
-            const githubToken = core.getInput('accessToken');
-            const fullCoverage = JSON.parse(core.getInput('fullCoverageDiff'));
-            const commandToRun = core.getInput('runCommand');
-            const delta = Number(core.getInput('delta'));
-            const githubClient = github.getOctokit(githubToken);
+            // const githubToken = core.getInput('accessToken')
+            // const fullCoverage = JSON.parse(core.getInput('fullCoverageDiff'))
+            // const commandToRun = core.getInput('runCommand')
+            // const delta = Number(core.getInput('delta'))
+            // const githubClient = github.getOctokit(githubToken)
             const prNumber = github.context.issue.number;
-            const branchNameBase = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.base.ref;
-            const branchNameHead = (_b = github.context.payload.pull_request) === null || _b === void 0 ? void 0 : _b.head.ref;
-            child_process_1.execSync(commandToRun);
-            const codeCoverageNew = (JSON.parse(fs_1.default.readFileSync('coverage-summary.json').toString()));
-            child_process_1.execSync('/usr/bin/git fetch');
-            child_process_1.execSync('/usr/bin/git stash');
-            child_process_1.execSync(`/usr/bin/git checkout --progress --force ${branchNameBase}`);
-            child_process_1.execSync(commandToRun);
-            const codeCoverageOld = (JSON.parse(fs_1.default.readFileSync('coverage-summary.json').toString()));
-            const currentDirectory = child_process_1.execSync('pwd')
-                .toString()
-                .trim();
-            const diffChecker = new DiffChecker_1.DiffChecker(codeCoverageNew, codeCoverageOld);
-            let messageToPost = `## Test coverage results :test_tube: \n
-    Code coverage diff between base branch:${branchNameBase} and head branch: ${branchNameHead} \n`;
-            const coverageDetails = diffChecker.getCoverageDetails(!fullCoverage, `${currentDirectory}/`);
-            if (coverageDetails.length === 0) {
-                messageToPost =
-                    'No changes to code coverage between the base branch and the head branch';
-            }
-            else {
-                messageToPost +=
-                    'Status | File | % Stmts | % Branch | % Funcs | % Lines \n -----|-----|---------|----------|---------|------ \n';
-                messageToPost += coverageDetails.join('\n');
-            }
-            yield githubClient.issues.createComment({
-                repo: repoName,
-                owner: repoOwner,
-                body: messageToPost,
-                issue_number: prNumber
-            });
-            // check if the test coverage is falling below delta/tolerance.
-            if (diffChecker.checkIfTestCoverageFallsBelowDelta(delta)) {
-                messageToPost = `Current PR reduces the test coverage percentage by ${delta} for some tests`;
+            // const branchNameBase = github.context.payload.pull_request?.base.ref
+            // const branchNameHead = github.context.payload.pull_request?.head.ref
+            // execSync(commandToRun)
+            const token = core.getInput('github-token');
+            const githubClient = github.getOctokit(token);
+            let workingDirectory = core.getInput('working-directory', { required: false });
+            let cwd = workingDirectory ? path_1.resolve(workingDirectory) : 'src/react';
+            // : process.cwd()
+            // const cwd = process.env.BRANCH
+            // console.log vs console.debug
+            console.debug(cwd, 'working-directory ...');
+            const CWD = cwd + path_1.sep;
+            // bcoz lcov file parse and tabulating is failing ..
+            const lcovFiles = core
+                .getInput('reports-array')
+                .split(' ')
+                .filter(x => x !== '');
+            // we shud not need to get from user
+            const baseFiles = core
+                .getInput('base-reports-array')
+                .split(' ')
+                .filter(x => x !== '');
+            console.debug(lcovFiles, baseFiles, 'coverage summary files');
+            // let reports: string[] = core.getInput("reports-array")
+            // reports = ["jest.common.json", "jest.web.json", "jest.pixel.json"]
+            // console.debug(reports, "reports ...")
+            for (let i in lcovFiles) {
+                const lcovFile = lcovFiles[i];
+                const baseFile = baseFiles[i];
+                console.debug(lcovFile, 'lcovFile ...');
+                console.debug(baseFile, 'baseFile ...');
+                const file0 = path_1.join(CWD, lcovFile);
+                const file1 = path_1.join(CWD, baseFile);
+                console.log(file0, 'file0');
+                const codeCoverageNew = (JSON.parse(fs_1.default.readFileSync(file1).toString()));
+                // execSync('/usr/bin/git fetch')
+                // execSync('/usr/bin/git stash')
+                // execSync(`/usr/bin/git checkout --progress --force ${branchNameBase}`)
+                // execSync(commandToRun)
+                const codeCoverageOld = (JSON.parse(fs_1.default.readFileSync(file0).toString()));
+                const currentDirectory = child_process_1.execSync('pwd').toString().trim();
+                console.debug(currentDirectory, 'current dir ....');
+                const diffChecker = new DiffChecker_1.DiffChecker(codeCoverageNew, codeCoverageOld);
+                let messageToPost = `## Test coverage results :test_tube: \n\n`;
+                // diff only - true
+                const coverageDetails = diffChecker.getCoverageDetails(true, `${currentDirectory}/`);
+                if (coverageDetails.length === 0) {
+                    messageToPost =
+                        'No changes to code coverage between the base branch and the head branch';
+                }
+                else {
+                    messageToPost +=
+                        'Status | File | % Stmts | % Branch | % Funcs | % Lines \n -----|-----|---------|----------|---------|------ \n';
+                    messageToPost += coverageDetails.join('\n');
+                }
+                yield githubClient.issues.createComment({
+                    repo: repoName,
+                    owner: repoOwner,
+                    body: messageToPost,
+                    issue_number: prNumber
+                });
+                // diffChecker.checkIfTestCoverageFallsBelowDelta(delta)
+                // check if the test coverage is falling below delta/tolerance.
+                // if () {
+                messageToPost = `Current PR reduces the test coverage percentage  for some tests`;
                 yield githubClient.issues.createComment({
                     repo: repoName,
                     owner: repoOwner,
@@ -2074,6 +2105,7 @@ function run() {
                     issue_number: prNumber
                 });
                 throw Error(messageToPost);
+                // }
             }
         }
         catch (error) {

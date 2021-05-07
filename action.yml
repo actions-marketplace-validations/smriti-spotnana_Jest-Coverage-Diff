@@ -2,6 +2,18 @@ name: 'Jest Coverage Diff'
 description: 'A github action to comment jest coverage diff on a PR'
 author: 'Anuraag Puri'
 inputs:
+  github-token:
+    description: Github token
+    required: true
+  reports-array:
+    description: The location of the coverage summary json file
+    required: false
+  base-reports-array:
+    description: The location of the coverage summaryfor the base branch
+    required: false
+  working-directory:
+    description: Sub-directory to get reports from
+    required: false
   accessToken:
     description: 'access token required to comment on a pr'
     default: ${{ github.token }}
