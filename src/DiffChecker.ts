@@ -61,7 +61,7 @@ export class DiffChecker {
     console.debug(keys, 'keys ...')
     const returnStrings: string[] = []
     for (const key of keys) {
-      if (this.compareCoverageValues(this.diffCoverageReport[key]) !== 0) {
+      if (true) {
         returnStrings.push(
           this.createDiffLine(
             key.replace(currentDirectory, ''),

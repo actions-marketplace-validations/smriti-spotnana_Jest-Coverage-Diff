@@ -6763,14 +6763,10 @@ class DiffChecker {
         console.debug(keys, 'keys ...');
         const returnStrings = [];
         for (const key of keys) {
-            if (this.compareCoverageValues(this.diffCoverageReport[key]) !== 0) {
+            if (true) {
                 returnStrings.push(this.createDiffLine(key.replace(currentDirectory, ''), this.diffCoverageReport[key]));
             }
-            else {
-                if (!diffOnly) {
-                    returnStrings.push(`${key.replace(currentDirectory, '')} | ${this.diffCoverageReport[key].statements.newPct} | ${this.diffCoverageReport[key].branches.newPct} | ${this.diffCoverageReport[key].functions.newPct} | ${this.diffCoverageReport[key].lines.newPct}`);
-                }
-            }
+            else {}
         }
         return returnStrings;
     }
