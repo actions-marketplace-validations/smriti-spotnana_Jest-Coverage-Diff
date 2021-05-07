@@ -17,14 +17,14 @@ export class DiffChecker {
   ) {
     const newO: CoverageReport = {}
     for (var key in coverageReportNew) {
-      const ky1 = '/' + key.substring(key.indexOf('transformers'))
+      const ky1 = '/' + key.substring(key.indexOf('hotels'))
       const value = coverageReportNew[key]
       newO[ky1] = value
     }
 
     const oldO: CoverageReport = {}
     for (var key in coverageReportOld) {
-      const ky1 = '/' + key.substring(key.indexOf('transformers'))
+      const ky1 = '/' + key.substring(key.indexOf('hotels'))
       const value = coverageReportOld[key]
       oldO[ky1] = value
     }

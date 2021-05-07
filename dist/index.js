@@ -2059,10 +2059,10 @@ function run() {
             // let reports: string[] = core.getInput("reports-array")
             // reports = ["jest.common.json", "jest.web.json", "jest.pixel.json"]
             // console.debug(reports, "reports ...")
-            for (let i in [lcovFiles[0]]) {
+            for (let i in [lcovFiles[1]]) {
                 const lcovFile = lcovFiles[i];
                 const baseFile = baseFiles[i];
-                console.debug(lcovFile, 'lcovFile ...only testing obt-common');
+                console.debug(lcovFile, 'lcovFile ...only testing web');
                 console.debug(baseFile, 'baseFile ...');
                 const file1 = path_1.join(CWD, lcovFile);
                 const file0 = path_1.join(CWD, baseFile);
@@ -6723,13 +6723,13 @@ class DiffChecker {
         this.diffCoverageReport = {};
         const newO = {};
         for (var key in coverageReportNew) {
-            const ky1 = '/' + key.substring(key.indexOf('transformers'));
+            const ky1 = '/' + key.substring(key.indexOf('hotels'));
             const value = coverageReportNew[key];
             newO[ky1] = value;
         }
         const oldO = {};
         for (var key in coverageReportOld) {
-            const ky1 = '/' + key.substring(key.indexOf('transformers'));
+            const ky1 = '/' + key.substring(key.indexOf('hotels'));
             const value = coverageReportOld[key];
             oldO[ky1] = value;
         }

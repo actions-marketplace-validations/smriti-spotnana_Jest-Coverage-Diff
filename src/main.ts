@@ -50,10 +50,10 @@ async function run(): Promise<void> {
     // reports = ["jest.common.json", "jest.web.json", "jest.pixel.json"]
 
     // console.debug(reports, "reports ...")
-    for (let i in [lcovFiles[0]]) {
+    for (let i in [lcovFiles[1]]) {
       const lcovFile = lcovFiles[i]
       const baseFile = baseFiles[i]
-      console.debug(lcovFile, 'lcovFile ...only testing obt-common')
+      console.debug(lcovFile, 'lcovFile ...only testing web')
       console.debug(baseFile, 'baseFile ...')
 
       const file1 = join(CWD, lcovFile)
