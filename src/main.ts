@@ -83,10 +83,8 @@ async function run(): Promise<void> {
       let messageToPost = `## Test coverage results :test_tube: \n\n`
 
       // diff only - true
-      const coverageDetails = diffChecker.getCoverageDetails(
-        true,
-        `${currentDirectory}/`
-      )
+      // true => two reports - for diff?
+      const coverageDetails = diffChecker.getCoverageDetails(false, `/`)
 
       if (coverageDetails.length === 0) {
         messageToPost =

@@ -2080,7 +2080,8 @@ function run() {
                 const diffChecker = new DiffChecker_1.DiffChecker(codeCoverageNew, codeCoverageOld);
                 let messageToPost = `## Test coverage results :test_tube: \n\n`;
                 // diff only - true
-                const coverageDetails = diffChecker.getCoverageDetails(true, `${currentDirectory}/`);
+                // true => two reports - for diff?
+                const coverageDetails = diffChecker.getCoverageDetails(false, `/`);
                 if (coverageDetails.length === 0) {
                     messageToPost =
                         'No changes to code coverage between the base branch and the head branch';
@@ -2100,12 +2101,12 @@ function run() {
                 // check if the test coverage is falling below delta/tolerance.
                 // if () {
                 // messageToPost = `Current PR reduces the test coverage percentage for some tests`
-                yield githubClient.issues.createComment({
-                    repo: repoName,
-                    owner: repoOwner,
-                    body: messageToPost,
-                    issue_number: prNumber
-                });
+                // await githubClient.issues.createComment({
+                //   repo: repoName,
+                //   owner: repoOwner,
+                //   body: messageToPost,
+                //   issue_number: prNumber
+                // })
                 // throw Error(messageToPost)
                 // }
             }
