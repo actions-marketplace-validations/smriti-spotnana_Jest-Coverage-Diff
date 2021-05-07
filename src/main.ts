@@ -56,8 +56,8 @@ async function run(): Promise<void> {
       console.debug(lcovFile, 'lcovFile ...only testing obt-common')
       console.debug(baseFile, 'baseFile ...')
 
-      const file0 = join(CWD, lcovFile)
-      const file1 = join(CWD, baseFile)
+      const file1 = join(CWD, lcovFile)
+      const file0 = join(CWD, baseFile)
       console.log(file0, 'file0')
 
       const codeCoverageNew = <CoverageReport>(

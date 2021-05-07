@@ -17,16 +17,14 @@ export class DiffChecker {
   ) {
     const newO: CoverageReport = {}
     for (var key in coverageReportNew) {
-      const ky1 =
-        '/transformers' + key.substring(key.indexOf('transformers') + 1)
+      const ky1 = '/' + key.substring(key.indexOf('transformers'))
       const value = coverageReportNew[key]
       newO[ky1] = value
     }
 
     const oldO: CoverageReport = {}
     for (var key in coverageReportOld) {
-      const ky1 =
-        '/transformers' + key.substring(key.indexOf('transformers') + 1)
+      const ky1 = '/' + key.substring(key.indexOf('transformers'))
       const value = coverageReportOld[key]
       oldO[ky1] = value
     }
@@ -141,6 +139,7 @@ export class DiffChecker {
       ('lines' | 'statements' | 'branches' | 'functions')[]
     >Object.keys(diffCoverageData)
     for (const key of keys) {
+      console.log(diffCoverageData[key], 'old- new pct ...')
       if (diffCoverageData[key].oldPct !== diffCoverageData[key].newPct) {
         return 1
       }

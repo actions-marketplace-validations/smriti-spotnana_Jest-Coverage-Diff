@@ -2064,8 +2064,8 @@ function run() {
                 const baseFile = baseFiles[i];
                 console.debug(lcovFile, 'lcovFile ...only testing obt-common');
                 console.debug(baseFile, 'baseFile ...');
-                const file0 = path_1.join(CWD, lcovFile);
-                const file1 = path_1.join(CWD, baseFile);
+                const file1 = path_1.join(CWD, lcovFile);
+                const file0 = path_1.join(CWD, baseFile);
                 console.log(file0, 'file0');
                 const codeCoverageNew = (JSON.parse(fs_1.default.readFileSync(file1).toString()));
                 // execSync('/usr/bin/git fetch')
@@ -6723,13 +6723,13 @@ class DiffChecker {
         this.diffCoverageReport = {};
         const newO = {};
         for (var key in coverageReportNew) {
-            const ky1 = '/transformers' + key.substring(key.indexOf('transformers') + 1);
+            const ky1 = '/' + key.substring(key.indexOf('transformers'));
             const value = coverageReportNew[key];
             newO[ky1] = value;
         }
         const oldO = {};
         for (var key in coverageReportOld) {
-            const ky1 = '/transformers' + key.substring(key.indexOf('transformers') + 1);
+            const ky1 = '/' + key.substring(key.indexOf('transformers'));
             const value = coverageReportOld[key];
             oldO[ky1] = value;
         }
@@ -6807,6 +6807,7 @@ class DiffChecker {
     compareCoverageValues(diffCoverageData) {
         const keys = Object.keys(diffCoverageData);
         for (const key of keys) {
+            console.log(diffCoverageData[key], 'old- new pct ...');
             if (diffCoverageData[key].oldPct !== diffCoverageData[key].newPct) {
                 return 1;
             }
