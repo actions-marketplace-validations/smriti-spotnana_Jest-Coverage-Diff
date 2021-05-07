@@ -2089,7 +2089,7 @@ function run() {
             }
             else {
                 messageToPost +=
-                    'File | % Stmts | % Branch | % Funcs | % Lines \n -----|-----|---------|----------|---------|------ \n\n';
+                    'File | % Stmts | % Branch | % Funcs | % Lines \n -----|---------|----------|---------|------ \n';
                 messageToPost += coverageDetails.join('\n');
             }
             yield githubClient.issues.createComment({
