@@ -2089,7 +2089,7 @@ function run() {
                 }
                 else {
                     messageToPost +=
-                        'Status | File | % Stmts | % Branch | % Funcs | % Lines \n -----|-----|---------|----------|---------|------ \n';
+                        'File | % Stmts | % Branch | % Funcs | % Lines \n -----|-----|---------|----------|---------|------ \n';
                     messageToPost += coverageDetails.join('\n');
                 }
                 yield githubClient.issues.createComment({
@@ -6791,25 +6791,29 @@ class DiffChecker {
         // No new coverage found so that means we deleted a file coverage
         const fileRemovedCoverage = Object.values(diffFileCoverageData).every(coverageData => coverageData.newPct === 0);
         if (fileNewCoverage) {
-            return ` ${newCoverageIcon} | **${name}** | **${diffFileCoverageData.statements.newPct}** | **${diffFileCoverageData.branches.newPct}** | **${diffFileCoverageData.functions.newPct}** | **${diffFileCoverageData.lines.newPct}**`;
+            return ` **${name}** | **${diffFileCoverageData.statements.newPct}** | **${diffFileCoverageData.branches.newPct}** | **${diffFileCoverageData.functions.newPct}** | **${diffFileCoverageData.lines.newPct}**`;
         }
         else if (fileRemovedCoverage) {
-            return ` ${removedCoverageIcon} | ~~${name}~~ | ~~${diffFileCoverageData.statements.oldPct}~~ | ~~${diffFileCoverageData.branches.oldPct}~~ | ~~${diffFileCoverageData.functions.oldPct}~~ | ~~${diffFileCoverageData.lines.oldPct}~~`;
+            return `  ~~${name}~~ | ~~${diffFileCoverageData.statements.oldPct}~~ | ~~${diffFileCoverageData.branches.oldPct}~~ | ~~${diffFileCoverageData.functions.oldPct}~~ | ~~${diffFileCoverageData.lines.oldPct}~~`;
         }
         // Coverage existed before so calculate the diff status
-        const statusIcon = this.getStatusIcon(diffFileCoverageData);
-        return ` ${statusIcon} | ${name} | ${diffFileCoverageData.statements.newPct} **(${this.getPercentageDiff(diffFileCoverageData.statements)})** | ${diffFileCoverageData.branches.newPct} **(${this.getPercentageDiff(diffFileCoverageData.branches)})** | ${diffFileCoverageData.functions.newPct} **(${this.getPercentageDiff(diffFileCoverageData.functions)})** | ${diffFileCoverageData.lines.newPct} **(${this.getPercentageDiff(diffFileCoverageData.lines)})**`;
+        // const statusIcon = this.getStatusIcon(diffFileCoverageData)
+        return ` ${name} | ${diffFileCoverageData.statements.newPct} **(${this.getPercentageDiff(diffFileCoverageData.statements)})** | ${diffFileCoverageData.branches.newPct} **(${this.getPercentageDiff(diffFileCoverageData.branches)})** | ${diffFileCoverageData.functions.newPct} **(${this.getPercentageDiff(diffFileCoverageData.functions)})** | ${diffFileCoverageData.lines.newPct} **(${this.getPercentageDiff(diffFileCoverageData.lines)})**`;
     }
-    compareCoverageValues(diffCoverageData) {
-        const keys = Object.keys(diffCoverageData);
-        for (const key of keys) {
-            console.log(diffCoverageData[key], 'old- new pct ...');
-            if (diffCoverageData[key].oldPct !== diffCoverageData[key].newPct) {
-                return 1;
-            }
-        }
-        return 0;
-    }
+    // private compareCoverageValues(
+    //   diffCoverageData: DiffFileCoverageData
+    // ): number {
+    //   const keys: ('lines' | 'statements' | 'branches' | 'functions')[] = <
+    //     ('lines' | 'statements' | 'branches' | 'functions')[]
+    //   >Object.keys(diffCoverageData)
+    //   for (const key of keys) {
+    //     console.log(diffCoverageData[key], 'old- new pct ...')
+    //     if (diffCoverageData[key].oldPct !== diffCoverageData[key].newPct) {
+    //       return 1
+    //     }
+    //   }
+    //   return 0
+    // }
     getPercentage(coverageData) {
         return (coverageData === null || coverageData === void 0 ? void 0 : coverageData.pct) || 0;
     }
