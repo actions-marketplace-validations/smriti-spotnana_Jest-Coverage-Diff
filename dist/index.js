@@ -2089,7 +2089,7 @@ function run() {
             }
             else {
                 messageToPost +=
-                    'File | % Stmts | % Branch | % Funcs | % Lines \n -----|-----|---------|----------|---------|------ \n';
+                    'File | % Stmts | % Branch | % Funcs | % Lines \n -----|-----|---------|----------|---------|------ \n\n';
                 messageToPost += coverageDetails.join('\n');
             }
             yield githubClient.issues.createComment({
@@ -6740,20 +6740,20 @@ class DiffChecker {
         for (const filePath of reportKeys) {
             this.diffCoverageReport[filePath] = {
                 branches: {
-                    newPct: this.getPercentage((_a = coverageReportNew[filePath]) === null || _a === void 0 ? void 0 : _a.branches),
-                    oldPct: this.getPercentage((_b = coverageReportOld[filePath]) === null || _b === void 0 ? void 0 : _b.branches)
+                    newPct: this.getPercentage((_a = newO[filePath]) === null || _a === void 0 ? void 0 : _a.branches),
+                    oldPct: this.getPercentage((_b = oldO[filePath]) === null || _b === void 0 ? void 0 : _b.branches)
                 },
                 statements: {
-                    newPct: this.getPercentage((_c = coverageReportNew[filePath]) === null || _c === void 0 ? void 0 : _c.statements),
-                    oldPct: this.getPercentage((_d = coverageReportOld[filePath]) === null || _d === void 0 ? void 0 : _d.statements)
+                    newPct: this.getPercentage((_c = newO[filePath]) === null || _c === void 0 ? void 0 : _c.statements),
+                    oldPct: this.getPercentage((_d = oldO[filePath]) === null || _d === void 0 ? void 0 : _d.statements)
                 },
                 lines: {
-                    newPct: this.getPercentage((_e = coverageReportNew[filePath]) === null || _e === void 0 ? void 0 : _e.lines),
-                    oldPct: this.getPercentage((_f = coverageReportOld[filePath]) === null || _f === void 0 ? void 0 : _f.lines)
+                    newPct: this.getPercentage((_e = newO[filePath]) === null || _e === void 0 ? void 0 : _e.lines),
+                    oldPct: this.getPercentage((_f = oldO[filePath]) === null || _f === void 0 ? void 0 : _f.lines)
                 },
                 functions: {
-                    newPct: this.getPercentage((_g = coverageReportNew[filePath]) === null || _g === void 0 ? void 0 : _g.functions),
-                    oldPct: this.getPercentage((_h = coverageReportOld[filePath]) === null || _h === void 0 ? void 0 : _h.functions)
+                    newPct: this.getPercentage((_g = newO[filePath]) === null || _g === void 0 ? void 0 : _g.functions),
+                    oldPct: this.getPercentage((_h = oldO[filePath]) === null || _h === void 0 ? void 0 : _h.functions)
                 }
             };
         }
@@ -6763,11 +6763,10 @@ class DiffChecker {
         console.debug(keys, 'keys ...');
         const returnStrings = [];
         for (const key of keys) {
-            if (false) {}
-            else {
-                // if (!diffOnly) {
-                returnStrings.push(` ${key.replace(currentDirectory, '')} | ${this.diffCoverageReport[key].statements.newPct} | ${this.diffCoverageReport[key].branches.newPct} | ${this.diffCoverageReport[key].functions.newPct} | ${this.diffCoverageReport[key].lines.newPct}`);
+            if (true) {
+                returnStrings.push(this.createDiffLine(key.replace(currentDirectory, ''), this.diffCoverageReport[key]));
             }
+            else {}
             // }
         }
         return returnStrings;

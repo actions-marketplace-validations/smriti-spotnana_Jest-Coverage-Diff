@@ -37,20 +37,20 @@ export class DiffChecker {
     for (const filePath of reportKeys) {
       this.diffCoverageReport[filePath] = {
         branches: {
-          newPct: this.getPercentage(coverageReportNew[filePath]?.branches),
-          oldPct: this.getPercentage(coverageReportOld[filePath]?.branches)
+          newPct: this.getPercentage(newO[filePath]?.branches),
+          oldPct: this.getPercentage(oldO[filePath]?.branches)
         },
         statements: {
-          newPct: this.getPercentage(coverageReportNew[filePath]?.statements),
-          oldPct: this.getPercentage(coverageReportOld[filePath]?.statements)
+          newPct: this.getPercentage(newO[filePath]?.statements),
+          oldPct: this.getPercentage(oldO[filePath]?.statements)
         },
         lines: {
-          newPct: this.getPercentage(coverageReportNew[filePath]?.lines),
-          oldPct: this.getPercentage(coverageReportOld[filePath]?.lines)
+          newPct: this.getPercentage(newO[filePath]?.lines),
+          oldPct: this.getPercentage(oldO[filePath]?.lines)
         },
         functions: {
-          newPct: this.getPercentage(coverageReportNew[filePath]?.functions),
-          oldPct: this.getPercentage(coverageReportOld[filePath]?.functions)
+          newPct: this.getPercentage(newO[filePath]?.functions),
+          oldPct: this.getPercentage(oldO[filePath]?.functions)
         }
       }
     }
@@ -61,7 +61,7 @@ export class DiffChecker {
     console.debug(keys, 'keys ...')
     const returnStrings: string[] = []
     for (const key of keys) {
-      if (false) {
+      if (true) {
         returnStrings.push(
           this.createDiffLine(
             key.replace(currentDirectory, ''),
