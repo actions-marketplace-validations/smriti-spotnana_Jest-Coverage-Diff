@@ -15,10 +15,27 @@ export class DiffChecker {
     coverageReportNew: CoverageReport,
     coverageReportOld: CoverageReport
   ) {
-    const reportNewKeys = Object.keys(coverageReportNew)
-    const reportOldKeys = Object.keys(coverageReportOld)
-    const reportKeys = new Set([...reportNewKeys, ...reportOldKeys])
+    const newO: CoverageReport = {}
+    for (var key in coverageReportNew) {
+      const ky1 =
+        '/transformers' + key.substring(key.indexOf('transformers') + 1)
+      const value = coverageReportNew[key]
+      newO[ky1] = value
+    }
 
+    const oldO: CoverageReport = {}
+    for (var key in coverageReportOld) {
+      const ky1 =
+        '/transformers' + key.substring(key.indexOf('transformers') + 1)
+      const value = coverageReportOld[key]
+      oldO[ky1] = value
+    }
+
+    const reportNewKeys = Object.keys(newO)
+    const reportOldKeys = Object.keys(oldO)
+
+    const reportKeys = new Set([...reportNewKeys, ...reportOldKeys])
+    console.debug(reportKeys, 'reportKeys - modified...')
     for (const filePath of reportKeys) {
       this.diffCoverageReport[filePath] = {
         branches: {
@@ -43,6 +60,7 @@ export class DiffChecker {
 
   getCoverageDetails(diffOnly: boolean, currentDirectory: string): string[] {
     const keys = Object.keys(this.diffCoverageReport)
+    console.debug(keys, 'keys ...')
     const returnStrings: string[] = []
     for (const key of keys) {
       if (this.compareCoverageValues(this.diffCoverageReport[key]) !== 0) {

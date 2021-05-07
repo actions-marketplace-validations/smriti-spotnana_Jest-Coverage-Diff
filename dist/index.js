@@ -2059,10 +2059,10 @@ function run() {
             // let reports: string[] = core.getInput("reports-array")
             // reports = ["jest.common.json", "jest.web.json", "jest.pixel.json"]
             // console.debug(reports, "reports ...")
-            for (let i in lcovFiles) {
+            for (let i in [lcovFiles[0]]) {
                 const lcovFile = lcovFiles[i];
                 const baseFile = baseFiles[i];
-                console.debug(lcovFile, 'lcovFile ...');
+                console.debug(lcovFile, 'lcovFile ...only testing obt-common');
                 console.debug(baseFile, 'baseFile ...');
                 const file0 = path_1.join(CWD, lcovFile);
                 const file1 = path_1.join(CWD, baseFile);
@@ -2081,7 +2081,8 @@ function run() {
                 let messageToPost = `## Test coverage results :test_tube: \n\n`;
                 // diff only - true
                 // true => two reports - for diff?
-                const coverageDetails = diffChecker.getCoverageDetails(false, `/`);
+                // two if deletion or addition bcoz keys diff
+                const coverageDetails = diffChecker.getCoverageDetails(true, `/`);
                 if (coverageDetails.length === 0) {
                     messageToPost =
                         'No changes to code coverage between the base branch and the head branch';
@@ -6720,9 +6721,22 @@ class DiffChecker {
     constructor(coverageReportNew, coverageReportOld) {
         var _a, _b, _c, _d, _e, _f, _g, _h;
         this.diffCoverageReport = {};
-        const reportNewKeys = Object.keys(coverageReportNew);
-        const reportOldKeys = Object.keys(coverageReportOld);
+        const newO = {};
+        for (var key in coverageReportNew) {
+            const ky1 = '/transformers' + key.substring(key.indexOf('transformers') + 1);
+            const value = coverageReportNew[key];
+            newO[ky1] = value;
+        }
+        const oldO = {};
+        for (var key in coverageReportOld) {
+            const ky1 = '/transformers' + key.substring(key.indexOf('transformers') + 1);
+            const value = coverageReportOld[key];
+            oldO[ky1] = value;
+        }
+        const reportNewKeys = Object.keys(newO);
+        const reportOldKeys = Object.keys(oldO);
         const reportKeys = new Set([...reportNewKeys, ...reportOldKeys]);
+        console.debug(reportKeys, 'reportKeys - modified...');
         for (const filePath of reportKeys) {
             this.diffCoverageReport[filePath] = {
                 branches: {
@@ -6746,6 +6760,7 @@ class DiffChecker {
     }
     getCoverageDetails(diffOnly, currentDirectory) {
         const keys = Object.keys(this.diffCoverageReport);
+        console.debug(keys, 'keys ...');
         const returnStrings = [];
         for (const key of keys) {
             if (this.compareCoverageValues(this.diffCoverageReport[key]) !== 0) {

@@ -50,10 +50,10 @@ async function run(): Promise<void> {
     // reports = ["jest.common.json", "jest.web.json", "jest.pixel.json"]
 
     // console.debug(reports, "reports ...")
-    for (let i in lcovFiles) {
+    for (let i in [lcovFiles[0]]) {
       const lcovFile = lcovFiles[i]
       const baseFile = baseFiles[i]
-      console.debug(lcovFile, 'lcovFile ...')
+      console.debug(lcovFile, 'lcovFile ...only testing obt-common')
       console.debug(baseFile, 'baseFile ...')
 
       const file0 = join(CWD, lcovFile)
@@ -84,7 +84,8 @@ async function run(): Promise<void> {
 
       // diff only - true
       // true => two reports - for diff?
-      const coverageDetails = diffChecker.getCoverageDetails(false, `/`)
+      // two if deletion or addition bcoz keys diff
+      const coverageDetails = diffChecker.getCoverageDetails(true, `/`)
 
       if (coverageDetails.length === 0) {
         messageToPost =
