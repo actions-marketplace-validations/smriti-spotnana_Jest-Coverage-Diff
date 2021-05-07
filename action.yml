@@ -1,4 +1,4 @@
-name: 'Jest Coverage Diff'
+name: 'Smriti Jest Coverage Diff'
 description: 'A github action to comment jest coverage diff on a PR'
 author: 'Anuraag Puri'
 inputs:
