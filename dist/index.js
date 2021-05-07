@@ -2073,7 +2073,9 @@ function run() {
                 // execSync(`/usr/bin/git checkout --progress --force ${branchNameBase}`)
                 // execSync(commandToRun)
                 const codeCoverageOld = (JSON.parse(fs_1.default.readFileSync(file0).toString()));
-                const currentDirectory = child_process_1.execSync('pwd').toString().trim();
+                const currentDirectory = child_process_1.execSync('pwd')
+                    .toString()
+                    .trim();
                 console.debug(currentDirectory, 'current dir ....');
                 const diffChecker = new DiffChecker_1.DiffChecker(codeCoverageNew, codeCoverageOld);
                 let messageToPost = `## Test coverage results :test_tube: \n\n`;
@@ -2097,14 +2099,14 @@ function run() {
                 // diffChecker.checkIfTestCoverageFallsBelowDelta(delta)
                 // check if the test coverage is falling below delta/tolerance.
                 // if () {
-                messageToPost = `Current PR reduces the test coverage percentage  for some tests`;
+                // messageToPost = `Current PR reduces the test coverage percentage for some tests`
                 yield githubClient.issues.createComment({
                     repo: repoName,
                     owner: repoOwner,
                     body: messageToPost,
                     issue_number: prNumber
                 });
-                throw Error(messageToPost);
+                // throw Error(messageToPost)
                 // }
             }
         }

@@ -70,7 +70,9 @@ async function run(): Promise<void> {
       const codeCoverageOld = <CoverageReport>(
         JSON.parse(fs.readFileSync(file0).toString())
       )
-      const currentDirectory = execSync('pwd').toString().trim()
+      const currentDirectory = execSync('pwd')
+        .toString()
+        .trim()
 
       console.debug(currentDirectory, 'current dir ....')
 
@@ -104,14 +106,14 @@ async function run(): Promise<void> {
       // diffChecker.checkIfTestCoverageFallsBelowDelta(delta)
       // check if the test coverage is falling below delta/tolerance.
       // if () {
-      messageToPost = `Current PR reduces the test coverage percentage  for some tests`
-      await githubClient.issues.createComment({
-        repo: repoName,
-        owner: repoOwner,
-        body: messageToPost,
-        issue_number: prNumber
-      })
-      throw Error(messageToPost)
+      // messageToPost = `Current PR reduces the test coverage percentage for some tests`
+      // await githubClient.issues.createComment({
+      //   repo: repoName,
+      //   owner: repoOwner,
+      //   body: messageToPost,
+      //   issue_number: prNumber
+      // })
+      // throw Error(messageToPost)
       // }
     }
   } catch (error) {
